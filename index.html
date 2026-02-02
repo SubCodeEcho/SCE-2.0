@@ -3,682 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>II Command Center - Full Automation Suite</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1600px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 95vh;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px 30px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-left {
-            flex: 1;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .voice-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .voice-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid white;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .voice-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        .voice-button.active {
-            background: #ff6b6b;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .voice-button.listening {
-            background: #51cf66;
-            animation: pulse 1s infinite;
-        }
-
-        .wake-word-indicator {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .wake-word-indicator.active {
-            background: #51cf66;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #95a5a6;
-        }
-
-        .status-dot.active {
-            background: #51cf66;
-        }
-
-        .ii-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .ii-card {
-            flex: 1;
-            max-width: 200px;
-            background: white;
-            border: 3px solid transparent;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .ii-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .ii-card.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-        }
-
-        .ii-card.raitha { border-color: #ff6b6b; }
-        .ii-card.raitha.active { background: linear-gradient(135deg, #ff6b6b15 0%, #ee5a5a15 100%); }
-        .ii-card.rena { border-color: #4ecdc4; }
-        .ii-card.rena.active { background: linear-gradient(135deg, #4ecdc415 0%, #44b3aa15 100%); }
-        .ii-card.leaf { border-color: #95e1d3; }
-        .ii-card.leaf.active { background: linear-gradient(135deg, #95e1d315 0%, #7cc7b915 100%); }
-
-        .ii-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 10px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .ii-card.raitha .ii-icon { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); }
-        .ii-card.rena .ii-icon { background: linear-gradient(135deg, #4ecdc4 0%, #44b3aa 100%); }
-        .ii-card.leaf .ii-icon { background: linear-gradient(135deg, #95e1d3 0%, #7cc7b9 100%); }
-
-        .ii-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .ii-status {
-            font-size: 11px;
-            color: #6c757d;
-        }
-
-        .main-workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .editor-section {
-            display: flex;
-            transition: all 0.3s ease;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .editor-section.collapsed {
-            max-height: 50px;
-            overflow: hidden;
-        }
-
-        .command-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            border-right: 2px solid #dee2e6;
-        }
-
-        .section-header {
-            padding: 12px 20px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-header h2 {
-            font-size: 16px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .collapse-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #6c757d;
-            transition: all 0.2s ease;
-            padding: 5px;
-        }
-
-        .collapse-btn:hover {
-            color: #333;
-            transform: scale(1.1);
-        }
-
-        .command-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .command-buttons button {
-            padding: 6px 14px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .btn-execute {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-execute:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-clear {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-clear:hover {
-            background: #c82333;
-        }
-
-        .command-input-wrapper {
-            flex: 1;
-            padding: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .command-input-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .command-input, .command-highlight {
-            width: 100%;
-            height: 100%;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            resize: none;
-            outline: none;
-        }
-
-        .command-input {
-            position: relative;
-            z-index: 2;
-            background: transparent;
-            color: #333;
-            caret-color: #333;
-        }
-
-        .command-highlight {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            background: white;
-            color: transparent;
-            pointer-events: none;
-            overflow-wrap: break-word;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .command-input:focus {
-            border-color: #667eea;
-        }
-
-        .output-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #1e1e1e;
-            max-height: 300px;
-            transition: all 0.3s ease;
-        }
-
-        .output-area.collapsed {
-            max-height: 50px;
-            overflow: hidden;
-        }
-
-        .output-header {
-            padding: 12px 20px;
-            background: #2d2d2d;
-            border-bottom: 2px solid #3c3c3c;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .output-header h2 {
-            font-size: 16px;
-        }
-
-        .output-content {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 12px;
-            color: #d4d4d4;
-        }
-
-        .log-entry {
-            margin-bottom: 8px;
-            padding: 6px 10px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .log-entry.info { border-left: 3px solid #4ecdc4; }
-        .log-entry.success { border-left: 3px solid #51cf66; color: #51cf66; }
-        .log-entry.error { border-left: 3px solid #ff6b6b; color: #ff6b6b; }
-        .log-entry.warning { border-left: 3px solid #ffd93d; color: #ffd93d; }
-        .log-entry.voice { border-left: 3px solid #a29bfe; color: #a29bfe; }
-
-        .log-timestamp {
-            opacity: 0.6;
-            margin-right: 10px;
-        }
-
-        .execution-screen {
-            background: #f8f9fa;
-            border-top: 2px solid #dee2e6;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            max-height: 40vh;
-        }
-
-        .execution-screen.collapsed {
-            max-height: 50px;
-            overflow: hidden;
-        }
-
-        .execution-screen.hidden {
-            display: none;
-        }
-
-        .execution-header {
-            padding: 12px 20px;
-            background: #e9ecef;
-            border-bottom: 2px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .execution-header h2 {
-            font-size: 16px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .execution-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .tab-count-badge {
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .btn-close-all {
-            padding: 6px 14px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-close-all:hover {
-            background: #c82333;
-        }
-
-        .execution-grid {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .tab-window {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 200px;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-window iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .tab-window-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            font-size: 11px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .tab-close {
-            width: 24px;
-            height: 24px;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .tab-close:hover {
-            background: #ee5a5a;
-        }
-
-        /* Syntax Highlighting */
-        .hl-ii-name { color: #ff6b6b; font-weight: bold; }
-        .hl-action { color: #667eea; font-weight: bold; }
-        .hl-separator { color: #6c757d; }
-        .hl-url { color: #4ecdc4; text-decoration: underline; }
-        .hl-number { color: #f39c12; font-weight: bold; }
-        .hl-comment { color: #95a5a6; font-style: italic; }
-        .hl-keyword { color: #9b59b6; font-weight: bold; }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        .ii-card.active {
-            animation: pulse 2s infinite;
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        .voice-transcript {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
-            font-size: 14px;
-            z-index: 10000;
-            display: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .voice-transcript.active {
-            display: block;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { bottom: 0; opacity: 0; }
-            to { bottom: 30px; opacity: 1; }
-        }
-    </style>
+    <title>Client-Side AI Prototype</title>
+    <link rel="stylesheet" href="/CSSs/style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header with Voice Controls -->
-        <div class="header">
-            <div class="header-left">
-                <h1> II Command Center - Full Automation Suite</h1>
-                <p>Voice Enabled | Wake Word Detection | Complete Automation Language</p>
-            </div>
-            <div class="voice-controls">
-                <div class="wake-word-indicator" id="wakeWordIndicator">
-                    <span class="status-dot" id="wakeWordDot"></span>
-                    <span id="wakeWordText">Wake: Off</span>
-                </div>
-                <button class="voice-button" id="voiceButton" onclick="toggleVoice()" title="Voice Input (Click to speak)">
-                    🎤
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Conversations</h2>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Chat
                 </button>
             </div>
-        </div>
-
-        <!-- II Selector -->
-        <div class="ii-selector">
-            <div class="ii-card raitha active" onclick="selectII('raitha')">
-                <div class="ii-icon">R</div>
-                <div class="ii-name">Raitha</div>
-                <div class="ii-status">Active</div>
+            <div class="chat-list" id="chatList">
+                <!-- Chat items will be dynamically added here -->
             </div>
-            <div class="ii-card rena" onclick="selectII('rena')">
-                <div class="ii-icon">R</div>
-                <div class="ii-name">Rena</div>
-                <div class="ii-status">Ready</div>
-            </div>
-            <div class="ii-card leaf" onclick="selectII('leaf')">
-                <div class="ii-icon">L</div>
-                <div class="ii-name">Leaf</div>
-                <div class="ii-status">Ready</div>
+            <div class="sidebar-footer">
+                <div class="storage-info" id="storageInfo">
+                    <small>Storage: <span id="storageUsed">0</span> KB</small>
+                </div>
             </div>
         </div>
 
-        <!-- Main Workspace -->
-        <div class="main-workspace">
-            <!-- Editor Section -->
-            <div id="editorSection" class="editor-section">
-                <div class="command-area">
-                    <div class="section-header">
-                        <h2> Command Input</h2>
-                        <div style="display: flex; gap: 8px;">
-                            <div class="command-buttons">
-                                <button class="btn-execute" onclick="executeCommand()">▶ Execute</button>
-                                <button class="btn-clear" onclick="clearCommand()"> Clear</button>
-                            </div>
-                            <button class="collapse-btn" onclick="toggleSection('editor')" title="Collapse Editor">
-                                <span id="editorCollapseIcon">▼</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="command-input-wrapper">
-                        <div class="command-input-container">
-                            <div id="commandHighlight" class="command-highlight"></div>
-                            <textarea id="commandInput" class="command-input" placeholder="Enter commands or say 'Hey Command' to use voice...
-
-NEW: Multiple commands with | separator!
-Raitha Ex.watch -- https://youtube.com/watch?v=abc.10 | Raitha Ex.watch -- https://twitch.tv/channel.5
-
-Platform Support:
-• YouTube, Twitch, Vimeo, DailyMotion
-• Facebook, Instagram, TikTok (limited)
-
-Examples:
-Raitha Ex.watch -- https://youtube.com/watch?v=example.50
-Raitha Ex.lurk -- https://twitch.tv/channel.10
-Raitha Ex.unmute -- all
-Rena Ex.scrape -- https://example.com.prices
-
-Try voice: Click  or say 'Hey Command' when wake word is active!" spellcheck="false"></textarea>
-                        </div>
-                    </div>
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <div class="chat-header">
+                <button class="menu-toggle" id="menuToggle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <h1>Client-Side AI</h1>
+                <div class="model-indicator">
+                    <span class="status-dot"></span>
+                    <span>Local Model Active</span>
                 </div>
+            </div>
 
-                <div id="outputSection" class="output-area">
-                    <div class="output-header">
-                        <h2> Console Output</h2>
-                        <button class="collapse-btn" onclick="toggleSection('output')">
-                            <span id="outputCollapseIcon">▼</span>
-                        </button>
-                    </div>
-                    <div id="outputContent" class="output-content">
-                        <div class="log-entry info">
-                            <span class="log-timestamp">[System]</span>
-                            II Command Center initialized. Voice controls ready.
-                        </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-message">
+                    <div class="welcome-icon">🤖</div>
+                    <h2>Welcome to Client-Side AI</h2>
+                    <p>A fully browser-based AI assistant with memory compression and tool integration</p>
+                    <div class="feature-tags">
+                        <span class="tag">Local Storage</span>
+                        <span class="tag">Compressed Memory</span>
+                        <span class="tag">Tool Integration</span>
+                        <span class="tag">Style Learning</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Execution Screen -->
-            <div id="executionScreen" class="execution-screen hidden">
-                <div class="execution-header">
-                    <h2> Execution Screen <span id="tabCountBadge" class="tab-count-badge">0 Tabs</span></h2>
-                    <div class="execution-controls">
-                        <button class="btn-close-all" onclick="closeAllTabs()">❌ Close All</button>
-                        <button class="collapse-btn" onclick="toggleSection('execution')">
-                            <span id="executionCollapseIcon">▼</span>
-                        </button>
-                    </div>
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="userInput" 
+                        placeholder="Ask me anything..." 
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
                 </div>
-                <div id="executionGrid" class="execution-grid"></div>
+                <div class="processing-indicator" id="processingIndicator">
+                    <div class="processing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>Processing...</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Voice Transcript Display -->
-    <div id="voiceTranscript" class="voice-transcript"></div>
-
-    <script src="/ii/O-code/ii.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="/JSs/ai-engine.js"></script>
+    <script src="/JSs/app.js"></script>
 </body>
 </html>
