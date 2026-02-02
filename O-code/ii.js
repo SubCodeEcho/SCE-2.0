@@ -1,10 +1,3 @@
-// ====================================================
-// II Command Center - Complete Automation Engine v3.0
-// ====================================================
-// Voice Control | Wake Word | All Commands Implemented
-// ====================================================
-
-// ===== GLOBAL STATE =====
 let currentII = 'raitha';
 let activeTabs = [];
 let commandHistory = [];
@@ -58,7 +51,7 @@ function initVoiceRecognition() {
         stopVoiceInput();
     };
 
-    // Wake word detection (continuous listening)
+    // Wake word detection
     wakeWordRecognition = new SpeechRecognition();
     wakeWordRecognition.continuous = true;
     wakeWordRecognition.interimResults = true;
@@ -68,7 +61,7 @@ function initVoiceRecognition() {
         const last = event.results.length - 1;
         const transcript = event.results[last][0].transcript.toLowerCase();
         
-        // Wake words: "hey command", "hey commander", "hello ii"
+        // Wake words list
         if (transcript.includes('hey command') || 
             transcript.includes('hey commander') || 
             transcript.includes('hello ii')) {
@@ -162,7 +155,7 @@ function hideTranscript() {
     }, 2000);
 }
 
-// ===== II SELECTION =====
+//main section of ii
 function selectII(iiName) {
     currentII = iiName;
     
@@ -178,7 +171,6 @@ function selectII(iiName) {
     logInfo(`Switched to ${capitalize(iiName)}`);
 }
 
-// ===== SECTION COLLAPSE =====
 function toggleSection(section) {
     const sections = {
         'editor': { element: document.getElementById('editorSection'), icon: document.getElementById('editorCollapseIcon') },
@@ -673,9 +665,6 @@ function openTabs(url, count, type) {
     const executionGrid = document.getElementById('executionGrid');
     const tabCountBadge = document.getElementById('tabCountBadge');
     
-    // Don't clear existing tabs - append instead
-    // executionGrid.innerHTML = '';
-    // activeTabs = [];
     
     executionScreen.classList.remove('hidden');
     if (collapsedSections.execution) toggleSection('execution');
@@ -1006,4 +995,5 @@ window.closeAllTabs = closeAllTabs;
 window.toggleSection = toggleSection;
 window.toggleVoice = toggleVoice;
 window.toggleWakeWord = toggleWakeWord;
+
 
