@@ -1,0 +1,77 @@
+{
+  "tools": [
+    {
+      "id": "text_capitalize",
+      "name": "Text Capitalizer",
+      "description": "Capitalizes text in various formats",
+      "keywords": ["capitalize", "uppercase", "caps", "capital"],
+      "scriptPath": "tools/text-tools.js",
+      "function": "capitalizeText",
+      "enabled": true
+    },
+    {
+      "id": "text_lowercase",
+      "name": "Text Lowercase",
+      "description": "Converts text to lowercase",
+      "keywords": ["lowercase", "lower", "small"],
+      "scriptPath": "tools/text-tools.js",
+      "function": "lowercaseText",
+      "enabled": true
+    },
+    {
+      "id": "text_count",
+      "name": "Text Counter",
+      "description": "Counts words, characters, sentences",
+      "keywords": ["count", "words", "characters", "length"],
+      "scriptPath": "tools/text-tools.js",
+      "function": "countText",
+      "enabled": true
+    },
+    {
+      "id": "calculator",
+      "name": "Calculator",
+      "description": "Performs mathematical calculations",
+      "keywords": ["calculate", "math", "compute", "solve", "+", "-", "*", "/", "multiply", "divide", "add", "subtract"],
+      "scriptPath": "/JSs/tools/math-tools.js",
+      "function": "calculate",
+      "enabled": true
+    },
+    {
+      "id": "image_compress",
+      "name": "Image Compressor",
+      "description": "Compresses and optimizes images",
+      "keywords": ["compress", "optimize", "image", "photo", "picture"],
+      "scriptPath": "tools/image-tools.js",
+      "function": "compressImage",
+      "enabled": true
+    },
+    {
+      "id": "text_reverse",
+      "name": "Text Reverser",
+      "description": "Reverses text strings",
+      "keywords": ["reverse", "backward", "flip"],
+      "scriptPath": "tools/text-tools.js",
+      "function": "reverseText",
+      "enabled": true
+    },
+    {
+      "id": "json_format",
+      "name": "JSON Formatter",
+      "description": "Formats and validates JSON",
+      "keywords": ["json", "format", "validate", "parse"],
+      "scriptPath": "tools/format-tools.js",
+      "function": "formatJSON",
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "defaultResponseLength": "medium",
+    "responseLengthOptions": {
+      "short": 100,
+      "medium": 250,
+      "long": 400
+    },
+    "learningEnabled": true,
+    "compressionEnabled": true
+  }
+}

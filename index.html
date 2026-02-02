@@ -45,6 +45,12 @@
                     <span class="status-dot"></span>
                     <span>Local Model Active</span>
                 </div>
+                <button class="settings-btn" id="settingsBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m8-12h-6M6 12H1m14.6-6.6l-4.2 4.2m-4.8 4.8l-4.2 4.2m13-4.2l-4.2-4.2M6.6 17.4l-4.2-4.2"></path>
+                    </svg>
+                </button>
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -87,8 +93,44 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Response Length</label>
+                    <select id="responseLengthSelect">
+                        <option value="short">Short (~100 words)</option>
+                        <option value="medium" selected>Medium (~250 words)</option>
+                        <option value="long">Long (~400 words)</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>Storage Limit (MB)</label>
+                    <input type="number" id="storageLimitInput" value="50" min="5" max="500" />
+                    <small>Current usage: <span id="currentUsage">0 MB</span></small>
+                </div>
+
+                <div class="setting-group">
+                    <label>Actions</label>
+                    <button class="danger-btn" id="clearTrainingBtn">Clear Training Data</button>
+                    <button class="danger-btn" id="clearAllBtn">Clear All Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="/JSs/ai-engine.js"></script>
-    <script src="/JSs/app.js"></script>
+    <script src="tools/text-tools.js"></script>
+    <script src="tools/math-tools.js"></script>
+    <script src="tools/image-tools.js"></script>
+    <script src="tools/format-tools.js"></script>
+    <script src="/JSs/ai-engine-v2.js"></script>
+    <script src="/JSs/text-tools.js"></script>
 </body>
 </html>
