@@ -1,136 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client-Side AI Prototype</title>
-    <link rel="stylesheet" href="/CSSs/style.css">
+  <meta charset="UTF-8" />
+  <title>ClientSide AI v2</title>
+
+  <link rel="stylesheet" href="/CSSs/style.css">
+
+  <!-- Compression lib -->
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>Conversations</h2>
-                <button class="new-chat-btn" id="newChatBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    New Chat
-                </button>
-            </div>
-            <div class="chat-list" id="chatList">
-                <!-- Chat items will be dynamically added here -->
-            </div>
-            <div class="sidebar-footer">
-                <div class="storage-info" id="storageInfo">
-                    <small>Storage: <span id="storageUsed">0</span> KB</small>
-                </div>
-            </div>
-        </div>
 
-        <!-- Main Chat Area -->
-        <div class="main-content">
-            <div class="chat-header">
-                <button class="menu-toggle" id="menuToggle">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-                <h1>Client-Side AI</h1>
-                <div class="model-indicator">
-                    <span class="status-dot"></span>
-                    <span>Local Model Active</span>
-                </div>
-                <button class="settings-btn" id="settingsBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 1v6m0 6v6m8-12h-6M6 12H1m14.6-6.6l-4.2 4.2m-4.8 4.8l-4.2 4.2m13-4.2l-4.2-4.2M6.6 17.4l-4.2-4.2"></path>
-                    </svg>
-                </button>
-            </div>
+  <div class="app">
+    <header>🧠 Client-Side AI</header>
 
-            <div class="chat-messages" id="chatMessages">
-                <div class="welcome-message">
-                    <div class="welcome-icon">🤖</div>
-                    <h2>Welcome to Client-Side AI</h2>
-                    <p>A fully browser-based AI assistant with memory compression and tool integration</p>
-                    <div class="feature-tags">
-                        <span class="tag">Local Storage</span>
-                        <span class="tag">Compressed Memory</span>
-                        <span class="tag">Tool Integration</span>
-                        <span class="tag">Style Learning</span>
-                    </div>
-                </div>
-            </div>
+    <div id="chat"></div>
 
-            <div class="input-container">
-                <div class="input-wrapper">
-                    <textarea 
-                        id="userInput" 
-                        placeholder="Ask me anything..." 
-                        rows="1"
-                    ></textarea>
-                    <button class="send-btn" id="sendBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-                <div class="processing-indicator" id="processingIndicator">
-                    <div class="processing-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <span>Processing...</span>
-                </div>
-            </div>
-        </div>
+    <div class="input-box">
+      <input id="userInput" placeholder="Talk to the AI..." />
+      <button id="sendBtn">Send</button>
     </div>
+  </div>
 
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Settings</h2>
-                <button class="close-btn" id="closeSettings">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label>Response Length</label>
-                    <select id="responseLengthSelect">
-                        <option value="short">Short (~100 words)</option>
-                        <option value="medium" selected>Medium (~250 words)</option>
-                        <option value="long">Long (~400 words)</option>
-                    </select>
-                </div>
+  <!-- Core engine -->
+  <script src="/JSs/ai-engine-v2.js"></script>
 
-                <div class="setting-group">
-                    <label>Storage Limit (MB)</label>
-                    <input type="number" id="storageLimitInput" value="50" min="5" max="500" />
-                    <small>Current usage: <span id="currentUsage">0 MB</span></small>
-                </div>
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
 
-                <div class="setting-group">
-                    <label>Actions</label>
-                    <button class="danger-btn" id="clearTrainingBtn">Clear Training Data</button>
-                    <button class="danger-btn" id="clearAllBtn">Clear All Data</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    function addMessage(role, text) {
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="/JSs/text-tools.js"></script>
-    <script src="/JSs/tools/math-tools.js"></script>
-    <script src="tools/image-tools.js"></script>
-    <script src="tools/format-tools.js"></script>
-    <script src="/JSs/ai-engine-v2.js"></script>
-    <script src="/JSs/text-tools.js"></script>
+    sendBtn.onclick = async () => {
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = "";
+      addMessage("user", text);
+
+      await aiEngine.addMessage("user", text);
+      const result = await aiEngine.processInput(text);
+
+      addMessage("ai", result.response);
+      await aiEngine.addMessage("assistant", result.response);
+    };
+
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+  </script>
 </body>
 </html>

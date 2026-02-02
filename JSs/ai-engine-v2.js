@@ -39,7 +39,7 @@ class ClientSideAI {
     // Load tools configuration from JSON
     async loadToolsConfig() {
         try {
-            const response = await fetch('tools-config.json');
+            const response = await fetch('/Jsons/tools-config.json');
             this.toolsConfig = await response.json();
             console.log('✅ Tools config loaded:', this.toolsConfig.tools.length, 'tools');
         } catch (error) {
