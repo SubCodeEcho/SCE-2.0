@@ -23,7 +23,7 @@
       "name": "Text Counter",
       "description": "Counts words, characters, sentences",
       "keywords": ["count", "words", "characters", "length"],
-      "scriptPath": "tools/text-tools.js",
+      "scriptPath": "/JSs/text-tools.js",
       "function": "countText",
       "enabled": true
     },
